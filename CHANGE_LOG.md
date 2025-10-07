@@ -1,5 +1,59 @@
 # Change Log
 
+## v0.4.0 - Zod Validation & Custom Error Handling
+
+*Timestamp: Tue, 07 Oct 2025 09:00:00 GMT*
+
+This update adds robust input validation using Zod and a structured, centralized error-handling system.
+
+*   **Add Zod Dependency**
+    *   In `apps/url-shorty-express-part-1/package.json`, add `"zod": "^3.23.8"` to the dependencies.
+    *   Run `pnpm install` from the root of the project to install the new package.
+
+*   **Implement Custom Error Classes**
+    *   In `index.ts`, create a base `ApiError` class that extends `Error` and includes a `statusCode`.
+    *   Create `BadRequestError` (400) and `NotFoundError` (404) classes that extend `ApiError`.
+
+*   **Create Zod Validation**
+    *   Define a `shortUrlSchema` using Zod to validate the request body. It should ensure `url` is a string, a valid URL, and no more than 2,048 characters.
+    *   Create a reusable `validate` middleware that takes a schema, parses the request, and throws a `BadRequestError` on failure.
+
+*   **Update Endpoints**
+    *   Apply the `validate(shortUrlSchema)` middleware to the `POST /api/url` route.
+    *   Change the `GET /:shortId` endpoint to `throw new NotFoundError(...)` instead of sending a JSON response directly.
+
+*   **Add Global Error Handler**
+    *   Implement a final `errorHandler` middleware that catches all errors.
+    *   It should check if the error is an instance of `ApiError` and return the appropriate status code and message.
+    *   For unexpected errors, it should log them and return a generic 500 Internal Server Error.
+    *   **Important:** This middleware must be added *after* all your routes with `app.use(errorHandler)`.
+
+### How to Test:
+Test the new validation and error responses.
+
+1.  **Test Invalid URL submission:**
+    ```bash
+    curl -X POST http://localhost:3000/api/url \
+    -H "Content-Type: application/json" \
+    -d '{"url": "not-a-valid-url"}'
+    ```
+    - **Expected Response (400 Bad Request):**
+      ```json
+      {"error":"Wrong url format"}
+      ```
+
+2.  **Test Not Found error:**
+    ```bash
+    # Use an ID that you know does not exist
+    curl -v http://localhost:3000/nonexistent
+    ```
+    - **Expected Response (404 Not Found):**
+      ```
+      < HTTP/1.1 404 Not Found
+      ...
+      {"error":"Short URL not found"}
+      ```
+
 ## v0.3.0 - Initial URL Shortener Feature
 
 *Timestamp: Tue, 07 Oct 2025 08:00:00 GMT*

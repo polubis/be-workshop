@@ -13,9 +13,9 @@ Users need to share long, complex URLs in places with character limits (like soc
 ### **Acceptance Criteria**
 a. An anonymous user can create a unique short URL for each submission.
     - [x] The user must provide a long URL to be shortened.
-        - [ ] The long URL must be a valid URL syntax (e.g., starting with `http://` or `https://`).
-        - [ ] The long URL must not exceed 2,048 characters to ensure broad compatibility.
-        - [ ] If the user submits an invalid URL, the system must return the error message: "Wrong url format".
+        - [x] The long URL must be a valid URL syntax (e.g., starting with `http://` or `https://`).
+        - [x] The long URL must not exceed 2,048 characters to ensure broad compatibility.
+        - [x] If the user submits an invalid URL, the system must return the error message: "Wrong url format".
     - [x] The system automatically generates a new, unique short URL for every single submission.
         - [x] The generated unique path must be at least 8 characters long.
         - [x] The path must contain only lowercase letters and numbers, making it case-insensitive.
@@ -46,9 +46,9 @@ b. The short URL is functional.
 ### **Structure**
 [x] An anonymous user can create a unique short URL for each submission.
 [x] The user must provide a long URL to be shortened.
-[ ] The long URL must be a valid URL syntax (e.g., starting with `http://` or `https://`).
-[ ] The long URL must not exceed 2,048 characters to ensure broad compatibility.
-[ ] If the user submits an invalid URL, the system must return the error message: "Wrong url format".
+[x] The long URL must be a valid URL syntax (e.g., starting with `http://` or `https://`).
+[x] The long URL must not exceed 2,048 characters to ensure broad compatibility.
+[x] If the user submits an invalid URL, the system must return the error message: "Wrong url format".
 [x] The system automatically generates a new, unique short URL for every single submission.
 [x] The generated unique path must be at least 8 characters long.
 [x] The path must contain only lowercase letters and numbers, making it case-insensitive.
