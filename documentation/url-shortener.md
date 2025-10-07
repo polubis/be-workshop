@@ -12,19 +12,19 @@ Users need to share long, complex URLs in places with character limits (like soc
 ***
 ### **Acceptance Criteria**
 a. An anonymous user can create a unique short URL for each submission.
-    - [ ] The user must provide a long URL to be shortened.
+    - [x] The user must provide a long URL to be shortened.
         - [ ] The long URL must be a valid URL syntax (e.g., starting with `http://` or `https://`).
         - [ ] The long URL must not exceed 2,048 characters to ensure broad compatibility.
         - [ ] If the user submits an invalid URL, the system must return the error message: "Wrong url format".
-    - [ ] The system automatically generates a new, unique short URL for every single submission.
-        - [ ] The generated unique path must be at least 8 characters long.
-        - [ ] The path must contain only lowercase letters and numbers, making it case-insensitive.
-        - [ ] The final short URL will be in the format: `domain/[unique-path]`.
-    - [ ] The system must guarantee that every generated short URL is unique.
+    - [x] The system automatically generates a new, unique short URL for every single submission.
+        - [x] The generated unique path must be at least 8 characters long.
+        - [x] The path must contain only lowercase letters and numbers, making it case-insensitive.
+        - [x] The final short URL will be in the format: `domain/[unique-path]`.
+    - [x] The system must guarantee that every generated short URL is unique.
         - [ ] If the generation algorithm produces a short URL that already exists, a system exception must be thrown and the user should be shown the message: "An unexpected error occurred, please try again".
-    - [ ] The system stores the association between the long and short URL in a key-value database.
+    - [x] The system stores the association between the long and short URL in a key-value database.
 b. The short URL is functional.
-    - [ ] Accessing the generated short URL redirects the visitor to the original long URL using a permanent 301 redirect.
+    - [x] Accessing the generated short URL redirects the visitor to the original long URL using a permanent 301 redirect.
 ***
 ### **Out of Scope**
 *   User-provided custom short URLs.
@@ -44,17 +44,17 @@ b. The short URL is functional.
 | Key-Value Database | A database that stores data as a collection of key-value pairs, used here to ensure short URLs are unique. |
 ***
 ### **Structure**
-[ ] An anonymous user can create a unique short URL for each submission.
-[ ] The user must provide a long URL to be shortened.
+[x] An anonymous user can create a unique short URL for each submission.
+[x] The user must provide a long URL to be shortened.
 [ ] The long URL must be a valid URL syntax (e.g., starting with `http://` or `https://`).
 [ ] The long URL must not exceed 2,048 characters to ensure broad compatibility.
 [ ] If the user submits an invalid URL, the system must return the error message: "Wrong url format".
-[ ] The system automatically generates a new, unique short URL for every single submission.
-[ ] The generated unique path must be at least 8 characters long.
-[ ] The path must contain only lowercase letters and numbers, making it case-insensitive.
-[ ] The final short URL will be in the format: `domain/[unique-path]`.
-[ ] The system must guarantee that every generated short URL is unique.
+[x] The system automatically generates a new, unique short URL for every single submission.
+[x] The generated unique path must be at least 8 characters long.
+[x] The path must contain only lowercase letters and numbers, making it case-insensitive.
+[x] The final short URL will be in the format: `domain/[unique-path]`.
+[x] The system must guarantee that every generated short URL is unique.
 [ ] If the generation algorithm produces a short URL that already exists, a system exception must be thrown and the user should be shown the message: "An unexpected error occurred, please try again".
-[ ] The system stores the association between the long and short URL in a key-value database.
-[ ] The short URL is functional.
-[ ] Accessing the generated short URL redirects the visitor to the original long URL using a permanent 301 redirect.
+[x] The system stores the association between the long and short URL in a key-value database.
+[x] The short URL is functional.
+[x] Accessing the generated short URL redirects the visitor to the original long URL using a permanent 301 redirect.

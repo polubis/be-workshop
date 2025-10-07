@@ -1,5 +1,63 @@
 # Change Log
 
+## v0.3.0 - Initial URL Shortener Feature
+
+*Timestamp: Tue, 07 Oct 2025 08:00:00 GMT*
+
+This update introduces the core URL shortening functionality. Here’s how you can recreate it:
+
+*   **Setup Express Server**
+    *   In `apps/url-shorty-express-part-1/src/index.ts`, add the `express.json()` middleware to parse JSON request bodies.
+    *   Create an empty object (`urlDatabase`) to serve as a temporary, in-memory database for storing URL mappings.
+
+*   **Create the Shortening Endpoint (`POST /api/url`)**
+    *   Add a `POST` route that accepts a JSON payload with a `url` property.
+    *   Implement a function (`generateShortId`) to create a random, 8-character string of lowercase letters and numbers.
+    *   Inside the endpoint, call this function to generate a unique ID. Make sure the ID doesn't already exist in `urlDatabase`.
+    *   Store the original URL with the new short ID as the key.
+    *   Respond with the full short URL.
+
+*   **Create the Redirect Endpoint (`GET /:shortId`)**
+    *   Add a `GET` route that uses a URL parameter (`:shortId`) to capture the short ID.
+    *   Look up the `shortId` in the `urlDatabase`.
+    *   If found, use `res.redirect(301, longUrl)` to permanently redirect the user.
+    *   If not found, respond with a `404 Not Found` error.
+
+### How to Test:
+You can test the new endpoints using `cURL` from your terminal.
+
+1.  **Create a short URL:**
+    ```bash
+    curl -X POST http://localhost:3000/api/url \
+    -H "Content-Type: application/json" \
+    -d '{"url": "https://www.example.com"}'
+    ```
+    - **Expected Response:** You will get a JSON response with the new short URL.
+      ```json
+      {"shortUrl":"http://localhost:3000/xxxxxxxx"}
+      ```
+      (Where `xxxxxxxx` is the randomly generated 8-character ID).
+
+2.  **Test the redirect:**
+    - Copy the 8-character ID from the response above.
+    - Use it in the following command:
+    ```bash
+    # Replace xxxxxxxx with the ID you received
+    curl -v http://localhost:3000/xxxxxxxx
+    ```
+    - **Expected Response:** Look for the `301 Moved Permanently` redirect header in the output.
+      ```
+      < HTTP/1.1 301 Moved Permanently
+      < Location: https://www.example.com
+      ...
+      ```
+
+**⚠️ Common Pitfalls for Beginners:**
+
+*   **Missing `express.json()`:** Forgetting to add `app.use(express.json());` will cause `req.body` to be `undefined`, and your `POST` endpoint won't be able to read the incoming URL.
+*   **Redirect Loop:** Be careful not to shorten a URL that points back to your own shortener (e.g., `localhost:3000`). This can cause an infinite redirect loop. We'll add validation for this later!
+*   **Data is Not Persistent:** Our in-memory `urlDatabase` will be cleared every time the server restarts. We will replace this with a real database (Supabase) in a future step.
+
 ## v0.2.0 - Express + TypeScript App Setup
 
 **Timestamp:** 2025-10-07
