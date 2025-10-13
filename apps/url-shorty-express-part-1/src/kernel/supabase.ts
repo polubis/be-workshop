@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import {
   createServerClient,
   parseCookieHeader,
@@ -10,7 +10,7 @@ import { env } from "./env";
  * Creates a Supabase server client for Express requests
  * Handles cookie management for authentication state
  */
-export const createSupabaseServerClient = (req: Request, res: Response) => {
+const createSupabaseServerClient = (req: Request, res: Response) => {
   const cookieHeader = req.headers.cookie || "";
 
   return createServerClient(env.supabaseUrl, env.supabaseAnonKey, {
@@ -36,4 +36,7 @@ export const createSupabaseServerClient = (req: Request, res: Response) => {
     },
   });
 };
+
+// Exports at the bottom
+export { createSupabaseServerClient };
 

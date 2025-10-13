@@ -1,7 +1,7 @@
 /**
  * Base API Error class for HTTP errors
  */
-export class ApiError extends Error {
+class ApiError extends Error {
   public readonly statusCode: number;
 
   constructor(message: string, statusCode: number) {
@@ -15,7 +15,7 @@ export class ApiError extends Error {
 /**
  * 400 Bad Request Error
  */
-export class BadRequestError extends ApiError {
+class BadRequestError extends ApiError {
   constructor(message = "Bad Request") {
     super(message, 400);
   }
@@ -24,7 +24,7 @@ export class BadRequestError extends ApiError {
 /**
  * 401 Unauthorized Error
  */
-export class UnauthorizedError extends ApiError {
+class UnauthorizedError extends ApiError {
   constructor(message = "Unauthorized") {
     super(message, 401);
   }
@@ -33,7 +33,7 @@ export class UnauthorizedError extends ApiError {
 /**
  * 403 Forbidden Error
  */
-export class ForbiddenError extends ApiError {
+class ForbiddenError extends ApiError {
   constructor(message = "Forbidden") {
     super(message, 403);
   }
@@ -42,7 +42,7 @@ export class ForbiddenError extends ApiError {
 /**
  * 404 Not Found Error
  */
-export class NotFoundError extends ApiError {
+class NotFoundError extends ApiError {
   constructor(message = "Not Found") {
     super(message, 404);
   }
@@ -51,7 +51,7 @@ export class NotFoundError extends ApiError {
 /**
  * 409 Conflict Error
  */
-export class ConflictError extends ApiError {
+class ConflictError extends ApiError {
   constructor(message = "Conflict") {
     super(message, 409);
   }
@@ -60,7 +60,7 @@ export class ConflictError extends ApiError {
 /**
  * 422 Unprocessable Entity Error
  */
-export class UnprocessableEntityError extends ApiError {
+class UnprocessableEntityError extends ApiError {
   constructor(message = "Unprocessable Entity") {
     super(message, 422);
   }
@@ -69,9 +69,21 @@ export class UnprocessableEntityError extends ApiError {
 /**
  * 500 Internal Server Error
  */
-export class InternalServerError extends ApiError {
+class InternalServerError extends ApiError {
   constructor(message = "Internal Server Error") {
     super(message, 500);
   }
 }
+
+// Exports at the bottom
+export { 
+  ApiError, 
+  BadRequestError, 
+  UnauthorizedError, 
+  ForbiddenError, 
+  NotFoundError, 
+  ConflictError, 
+  UnprocessableEntityError, 
+  InternalServerError 
+};
 

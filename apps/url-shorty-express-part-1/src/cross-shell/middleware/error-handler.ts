@@ -1,11 +1,11 @@
-import { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import { ApiError } from "../../lib/errors";
 
 /**
  * Global error handler middleware
  * Catches all errors thrown in the application and returns appropriate responses
  */
-export const errorHandler = (
+const errorHandler = (
   err: Error,
   req: Request,
   res: Response,
@@ -22,4 +22,7 @@ export const errorHandler = (
   // Handle all other errors as 500 Internal Server Error
   return res.status(500).json({ error: "Internal Server Error" });
 };
+
+// Exports at the bottom
+export { errorHandler };
 
