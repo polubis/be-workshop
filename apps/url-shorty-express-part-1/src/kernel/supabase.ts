@@ -5,6 +5,7 @@ import {
   serializeCookieHeader,
 } from "@supabase/ssr";
 import { env } from "./env";
+import { Database } from "../ipc/database";
 
 /**
  * Creates a Supabase server client for Express requests
@@ -13,7 +14,7 @@ import { env } from "./env";
 const createSupabaseServerClient = (req: Request, res: Response) => {
   const cookieHeader = req.headers.cookie || "";
 
-  return createServerClient(env.supabaseUrl, env.supabaseAnonKey, {
+  return createServerClient<Database>(env.supabaseUrl, env.supabaseAnonKey, {
     cookies: {
       getAll() {
         const cookies = parseCookieHeader(cookieHeader);

@@ -10,7 +10,8 @@
     "db:stop": "npx supabase stop",
     "db:migrate": "npx supabase migration up",
     "db:reset": "npx supabase db reset",
-    "db:new-migration": "npx supabase migration new"
+    "db:new-migration": "npx supabase migration new",
+    "db:typegen": "npx supabase gen types typescript --local > src/ipc/database.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.7.0",
