@@ -10,42 +10,36 @@ import { generateShortId } from "./utils";
 export const urlShorteningHandler = async (req: Request, res: Response) => {
   const { url } = req.body;
   const supabase = createSupabaseServerClient(req, res);
-
+  
   const maxRetries = 10;
-  let retries = 0;
 
-  while (retries < maxRetries) {
+  for (let retries = 0; retries < maxRetries; retries++) {
     const shortId = generateShortId(8);
 
-    try {
-      const { error } = await supabase.from("urls").insert([
-        {
-          long_url: url,
-          short_code: shortId,
-        },
-      ]);
+    const { error } = await supabase.from("urls").insert([
+      {
+        long_url: url,
+        short_code: shortId,
+      },
+    ]);
 
-      if (error) {
-        // If it's a unique constraint violation, try again
-        if (error.code === "23505") {
-          retries++;
-          continue;
-        }
-        throw error;
-      }
-
+    if (!error) {
+      // Success - return the short URL
       const PORT = process.env.PORT || 3000;
       const shortUrl = `http://localhost:${PORT}/${shortId}`;
       return res.status(201).json({ shortUrl });
-    } catch (error) {
-      if (retries >= maxRetries - 1) {
-        throw new ApiError(
-          "An unexpected error occurred, please try again",
-          500
-        );
-      }
-      retries++;
     }
+
+    // If it's a unique constraint violation, retry with a new short code
+    if (error.code === "23505") {
+      continue;
+    }
+
+    // For any other database error, throw it immediately
+    throw error;
   }
+
+  // If all retries are exhausted, throw the required error message
+  throw new ApiError("An unexpected error occurred, please try again", 500);
 };
 

@@ -21,7 +21,7 @@ a. An anonymous user can create a unique short URL for each submission.
         - [x] The path must contain only lowercase letters and numbers, making it case-insensitive.
         - [x] The final short URL will be in the format: `domain/[unique-path]`.
     - [x] The system must guarantee that every generated short URL is unique.
-        - [ ] If the generation algorithm produces a short URL that already exists, a system exception must be thrown and the user should be shown the message: "An unexpected error occurred, please try again".
+        - [x] If the generation algorithm produces a short URL that already exists, a system exception must be thrown and the user should be shown the message: "An unexpected error occurred, please try again".
     - [x] The system stores the association between the long and short URL in a key-value database.
 b. The short URL is functional.
     - [x] Accessing the generated short URL redirects the visitor to the original long URL using a permanent 301 redirect.
@@ -54,7 +54,7 @@ b. The short URL is functional.
 [x] The path must contain only lowercase letters and numbers, making it case-insensitive.
 [x] The final short URL will be in the format: `domain/[unique-path]`.
 [x] The system must guarantee that every generated short URL is unique.
-[ ] If the generation algorithm produces a short URL that already exists, a system exception must be thrown and the user should be shown the message: "An unexpected error occurred, please try again".
+[x] If the generation algorithm produces a short URL that already exists, a system exception must be thrown and the user should be shown the message: "An unexpected error occurred, please try again".
 [x] The system stores the association between the long and short URL in a key-value database.
 [x] The short URL is functional.
 [x] Accessing the generated short URL redirects the visitor to the original long URL using a permanent 301 redirect.
