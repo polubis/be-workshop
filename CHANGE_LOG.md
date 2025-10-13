@@ -1,5 +1,112 @@
 # Change Log
 
+## v0.5.0 - Supabase Database Integration
+
+*Timestamp: Mon, 13 Oct 2025 09:00:00 GMT*
+
+This update replaces the in-memory storage with a proper Supabase database, adds environment variable validation, and includes local development database setup.
+
+*   **Add Supabase Dependencies**
+    *   In `apps/url-shorty-express-part-1/package.json`, add `"@supabase/ssr": "^0.7.0"` for server-side rendering support with cookie handling.
+    *   Add `"dotenv": "^17.2.3"` for environment variable management.
+    *   Add `"supabase": "^2.51.0"` as a dev dependency for local CLI operations.
+
+*   **Add Database Management Scripts**
+    *   Add `"db:start": "npx supabase start"` to start the local Supabase development environment.
+    *   Add `"db:stop": "npx supabase stop"` to stop the local development environment.
+    *   Add `"db:migrate": "npx supabase migration up"` to apply database migrations.
+    *   Add `"db:reset": "npx supabase db reset"` to reset the local database.
+    *   Add `"db:new-migration": "npx supabase migration new"` to create new migration files.
+
+*   **Implement Environment Validation**
+    *   In `index.ts`, add `import "dotenv/config"` at the top to load environment variables.
+    *   Create `validateEnvironment()` function using Zod to validate required environment variables.
+    *   Validate `SUPABASE_URL` as a proper URL and `SUPABASE_ANON_KEY` as a required string.
+    *   Exit gracefully with helpful error messages if environment validation fails.
+
+*   **Setup Supabase Server Client**
+    *   Import Supabase SSR utilities: `createServerClient`, `parseCookieHeader`, `serializeCookieHeader`.
+    *   Create `createSupabaseServerClient()` function that handles cookie parsing and setting for proper session management.
+    *   Configure secure cookie options with `httpOnly`, `secure` (production only), and `sameSite: "lax"`.
+
+*   **Replace In-Memory Storage with Database**
+    *   Remove the `urlDatabase` object completely.
+    *   Update `POST /api/url` endpoint to use `supabase.from("urls").insert()` with retry logic for unique constraint violations.
+    *   Update `GET /:shortId` endpoint to use `supabase.from("urls").select().eq().single()` for database queries.
+    *   Add proper error handling for database operations with fallback to generic error messages.
+
+*   **Initialize Supabase Local Development**
+    *   Create `supabase/.gitignore` to exclude temporary Supabase files from version control.
+    *   Generate `supabase/config.toml` with comprehensive local development configuration including API, database, auth, storage, and studio settings.
+    *   Create initial migration `20251013074417_init.sql` with the `urls` table schema.
+
+*   **Database Schema (`urls` table)**
+    *   `id`: Auto-incrementing primary key
+    *   `creation_date`: Timestamp with timezone, defaults to now()
+    *   `update_date`: Timestamp with timezone, auto-updated via trigger
+    *   `long_url`: Text field with constraints (1-2048 chars, must start with http:// or https://)
+    *   `short_code`: Text field with constraints (min 8 chars, lowercase letters and numbers only)
+    *   `unique_short_code`: Unique constraint on short_code to prevent duplicates
+    *   Includes trigger function `handle_updated_at()` to automatically update `update_date` on modifications.
+
+### How to Setup:
+Before running the application, you need to set up the local Supabase environment and configure environment variables.
+
+1.  **Install Supabase CLI dependencies:**
+    ```bash
+    pnpm install
+    ```
+
+2.  **Start local Supabase development environment:**
+    ```bash
+    cd apps/url-shorty-express-part-1
+    pnpm db:start
+    ```
+    This will start Docker containers for PostgreSQL, Supabase Studio, and other services.
+
+3.  **Create environment file:**
+    Create `.env` in `apps/url-shorty-express-part-1/` with:
+    ```env
+    SUPABASE_URL=http://127.0.0.1:54321
+    SUPABASE_ANON_KEY=your_anon_key_from_supabase_start_output
+    ```
+    **Note:** The `SUPABASE_ANON_KEY` is displayed in the terminal when you run `pnpm db:start`.
+
+4.  **Access Supabase Studio:**
+    - Open `http://localhost:54323` to view your local database in Supabase Studio
+    - You can inspect tables, run queries, and manage your database schema
+
+### How to Test:
+The API endpoints work the same as before, but now use a real database.
+
+1.  **Test creating a short URL:**
+    ```bash
+    curl -X POST http://localhost:3000/api/url \
+    -H "Content-Type: application/json" \
+    -d '{"url": "https://www.example.com"}'
+    ```
+    - **Expected Response:** Same as before, but data is now persisted in the database.
+      ```json
+      {"shortUrl":"http://localhost:3000/xxxxxxxx"}
+      ```
+
+2.  **Test the redirect:**
+    ```bash
+    curl -v http://localhost:3000/xxxxxxxx
+    ```
+    - **Expected Response:** Same 301 redirect behavior, but data retrieved from database.
+
+3.  **Verify database persistence:**
+    - Stop your Express server and restart it
+    - Previously created short URLs should still work (unlike the in-memory version)
+    - Check the `urls` table in Supabase Studio at `http://localhost:54323`
+
+### Important Notes:
+*   **Database Persistence:** Unlike the previous in-memory version, your data now persists between server restarts.
+*   **Environment Variables Required:** The server will not start without proper `SUPABASE_URL` and `SUPABASE_ANON_KEY` configuration.
+*   **Local Development Only:** This setup uses local Supabase containers. For production, you'd need to create a Supabase project and use production credentials.
+*   **Docker Required:** The `supabase start` command requires Docker to be installed and running on your system.
+
 ## v0.4.0 - Zod Validation & Custom Error Handling
 
 *Timestamp: Tue, 07 Oct 2025 09:00:00 GMT*
