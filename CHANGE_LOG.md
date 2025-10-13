@@ -1,5 +1,143 @@
 # Change Log
 
+## v0.7.0 - Code Style Guide Implementation & Architecture Refactoring
+
+*Timestamp: Mon, 13 Oct 2025 12:06:00 GMT*
+
+This major update implements a comprehensive code style guide and refactors the application to follow Linux-inspired modular architecture patterns.
+
+### **Code Style Guide Implementation**
+*   **Create Comprehensive Code Style Guide**
+    *   Add `documentation/code-style.md` with detailed coding conventions
+    *   Define JavaScript rules: avoid `this` keyword, function declarations, prefer bottom-of-file exports
+    *   Define TypeScript rules: avoid `any` types, prefer `unknown`, use `import type` syntax, prefer types over interfaces
+    *   Define General rules: facade pattern for libraries, functional programming over OOP, small middleware, kebab-case naming
+
+*   **Apply Code Style Fixes**
+    *   Convert all function declarations to function expressions
+    *   Move all inline exports to bottom-of-file exports
+    *   Replace `any` types with `unknown` and proper type guards
+    *   Use `import type` for type-only imports from Express
+    *   Apply consistent naming conventions throughout codebase
+
+### **Linux-Inspired Architecture Refactoring**
+*   **Implement Modular Shell Architecture**
+    *   Create `src/shells/` directory for isolated endpoint modules
+    *   Implement `url-shortening/`, `url-retrieval/`, and `health-check/` shells
+    *   Each shell is self-contained with its own handlers and utilities
+    *   Shells communicate only through defined interfaces, never directly
+
+*   **Add Cross-Shell Services**
+    *   Create `src/cross-shell/middleware/` for shared middleware
+    *   Implement `validate.ts` and `error-handler.ts` as reusable components
+    *   Middleware follows single responsibility principle
+
+*   **Implement Kernel Layer**
+    *   Create `src/kernel/` for core system services
+    *   Add `env.ts` for environment variable validation
+    *   Add `supabase.ts` for database client management
+    *   Kernel provides foundational services to shells
+
+*   **Add IPC Contracts**
+    *   Create `src/ipc/` for type definitions and schemas
+    *   Implement `payloads.ts` with Zod validation schemas
+    *   Clear separation between runtime values and compile-time types
+
+*   **Enhance Error Handling**
+    *   Create comprehensive error class hierarchy in `src/lib/errors.ts`
+    *   Implement `ApiError` base class with status codes
+    *   Add specific error classes: `BadRequestError`, `NotFoundError`, `UnauthorizedError`, etc.
+    *   Centralized error handling with proper HTTP status codes
+
+### **Architecture Benefits**
+*   **Modularity**: Clear separation of concerns between endpoint modules
+*   **Scalability**: Easy to add new endpoint modules without affecting existing ones
+*   **Maintainability**: Isolated modules are easier to maintain and refactor
+*   **Type Safety**: IPC contracts ensure type-safe communication between layers
+*   **Testing**: Each module can be tested in isolation with clear boundaries
+
+### **Code Quality Improvements**
+*   **Type Safety**: All `any` types replaced with `unknown` and proper type guards
+*   **Consistency**: Uniform code style across entire codebase
+*   **Performance**: Type-only imports for better tree-shaking
+*   **Maintainability**: Clear separation between implementation and public API
+
+### **Files Modified**
+*   **14 files changed** with comprehensive refactoring
+*   **970+ lines added** for code style guide documentation
+*   **121 lines removed** from consolidated architecture
+*   **All handlers** converted to follow new patterns
+*   **All middleware** updated to use new error handling
+
+### **How to Use the New Architecture**
+The application now follows a clear modular pattern:
+
+1. **Shells** (`src/shells/`): Isolated endpoint modules
+   - Each shell handles one domain (URL shortening, retrieval, health)
+   - Self-contained with internal logic and utilities
+   - Exports only public API through `index.ts`
+
+2. **Cross-Shell** (`src/cross-shell/`): Shared domain services
+   - Middleware used across multiple shells
+   - Validation and error handling utilities
+   - Domain-specific business logic
+
+3. **Kernel** (`src/kernel/`): System core services
+   - Environment validation and configuration
+   - Database client management
+   - Foundational services for the application
+
+4. **IPC** (`src/ipc/`): Communication contracts
+   - Type definitions and validation schemas
+   - Clear interfaces between layers
+   - Type-safe data exchange
+
+## v0.6.0 - Linux-Inspired Architecture Implementation
+
+*Timestamp: Mon, 13 Oct 2025 11:03:00 GMT*
+
+This update refactors the application to follow a Linux-inspired modular architecture, providing better separation of concerns and scalability.
+
+*   **Implement Shell Architecture**
+    *   Create `src/shells/` directory for isolated endpoint modules
+    *   Implement `url-shortening/`, `url-retrieval/`, and `health-check/` shells
+    *   Each shell is self-contained with its own handlers and utilities
+    *   Shells communicate only through defined interfaces
+
+*   **Add Cross-Shell Services**
+    *   Create `src/cross-shell/middleware/` for shared middleware
+    *   Implement `validate.ts` and `error-handler.ts` as reusable components
+    *   Middleware follows single responsibility principle
+
+*   **Implement Kernel Layer**
+    *   Create `src/kernel/` for core system services
+    *   Add `env.ts` for environment variable validation
+    *   Add `supabase.ts` for database client management
+    *   Kernel provides foundational services to shells
+
+*   **Add IPC Contracts**
+    *   Create `src/ipc/` for type definitions and schemas
+    *   Implement `payloads.ts` with Zod validation schemas
+    *   Clear separation between runtime values and compile-time types
+
+*   **Enhance Error Handling**
+    *   Create comprehensive error class hierarchy in `src/lib/errors.ts`
+    *   Implement `ApiError` base class with status codes
+    *   Add specific error classes: `BadRequestError`, `NotFoundError`, `UnauthorizedError`, etc.
+    *   Centralized error handling with proper HTTP status codes
+
+*   **Create Architecture Documentation**
+    *   Add `documentation/architecture.md` with detailed architecture explanation
+    *   Document the Linux-inspired design principles
+    *   Provide clear guidelines for future development
+
+### **Architecture Benefits**
+*   **Modularity**: Clear separation of concerns between endpoint modules
+*   **Scalability**: Easy to add new endpoint modules without affecting existing ones
+*   **Maintainability**: Isolated modules are easier to maintain and refactor
+*   **Type Safety**: IPC contracts ensure type-safe communication between layers
+*   **Testing**: Each module can be tested in isolation with clear boundaries
+
 ## v0.5.0 - Supabase Database Integration
 
 *Timestamp: Mon, 13 Oct 2025 09:00:00 GMT*
