@@ -1,4 +1,5 @@
 import "dotenv/config";
+import "express-async-errors";
 import express from "express";
 import { shortUrlSchema } from "./ipc/payloads";
 import { validate } from "./cross-shell/middleware/validate";
