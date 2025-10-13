@@ -1,0 +1,2 @@
+export { healthCheckHandler } from "./handler";
+

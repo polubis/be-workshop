@@ -1,0 +1,2 @@
+export { urlShorteningHandler } from "./handler";
+
